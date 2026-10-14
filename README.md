@@ -59,7 +59,7 @@ Put this in **user settings** (`~/.claude/settings.json`) to get handoffs in eve
 
 For one project only, install without `-g` and put [`hooks/settings.project.json`](session-handoff/hooks/settings.project.json) in that project's `.claude/settings.json`. It's the same block with paths under `$CLAUDE_PROJECT_DIR/.claude/skills/`. Commit it and your teammates get it too. If you already have hooks, add these entries to your existing `SessionStart` and `Stop` arrays.
 
-Needs `python3`. No other dependencies.
+Needs `python3`. No other dependencies. Test the hooks with `python3 session-handoff/hooks/test_hooks.py`.
 
 ### No hooks
 
@@ -120,7 +120,7 @@ The SessionStart hook loaded the note. Claude's first action was reading `todo.p
 - 2026-10-14 (9584313d): Built todo.py with add and list, tested both once; done and delete still to do.
 ```
 
-Session 1 cost $0.042 and session 2 cost $0.049, handoff included.
+Session 1 cost $0.042 and session 2 cost $0.049, handoff included. After adding the excuse table and checklist to SKILL.md I ran both sessions again. The Stop hook blocked once per session, the SessionStart hook loaded the note, and session 2 built `done` and `delete` from "Keep going." alone ($0.040 and $0.071).
 
 **Session 3, interactive.** Asked *"What did we do last time, and what's left?"* Claude answered from the note with no tool calls (*"Last time: We built todo.py, a small todo CLI. It now has four commands: add, list, done, and delete."*). Nothing changed that turn, so the Stop hook let it end and `HANDOFF.md` was left alone.
 

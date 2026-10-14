@@ -1,11 +1,16 @@
 ---
 name: session-handoff
-description: Keep a HANDOFF.md in the project root so every session can start fresh instead of using `claude --resume`. Use at the start of a session when HANDOFF.md exists (read it first), when a session is ending or the user says "wrap up", "hand off", "save where we are", or "I'm done for today", and whenever a Stop hook asks you to update HANDOFF.md.
+description: Maintains HANDOFF.md in the project root so a new session can start fresh with full context instead of using `claude --resume`. Use when a session starts and HANDOFF.md exists, when the user says "wrap up", "save where we are", "I'm done for today", or "pick up where we left off", and when a Stop hook asks for a HANDOFF.md update. Not for briefing a different agent or person; use a handover prompt for that.
 ---
 
 # Session handoff
 
 Resuming a cold session re-reads the whole transcript without the prompt cache, which burns usage. A short note in `HANDOFF.md` gives a new session the same footing for a fraction of the tokens.
+
+## When not to use
+
+- Handing work to a different agent or a person. They need a brief written for them.
+- Throwaway sessions outside a project, such as a one-off question in your home directory.
 
 ## At session start
 
@@ -49,9 +54,33 @@ Rules:
 - Don't put secrets in it.
 - After writing it, stop. Don't repeat the note back to the user.
 
+## Excuses to ignore
+
+| Excuse | Why it's wrong |
+| --- | --- |
+| "Nothing much changed." | If you edited a file or ran a command, the next session needs to know. A one-line update is enough. |
+| "The user can resume this session." | Resuming a cold session is the cost this skill exists to avoid. |
+| "The git log already says what happened." | Git doesn't record what's next, what's blocked, or what the user still has to decide. |
+| "I'll keep the old sections and add a new one." | Stale status reads as current to the next session. Overwrite it. |
+
+## Red flags
+
+- Pasted logs, stack traces, or code blocks in the note.
+- "Where we stopped" describes an earlier state than the code.
+- Two "Previous sessions" lines for the same session id.
+- "Next" says "continue working" instead of naming a step.
+
+## Before you stop
+
+- [ ] Under about 40 lines.
+- [ ] "Where we stopped" names an exact point.
+- [ ] "Next" starts with a concrete action.
+- [ ] Every file under "Key files" exists.
+- [ ] One "Previous sessions" line for this session, at the top.
+
 ## Hooks
 
-`hooks/handoff_stop.py` is a Stop hook. Claude Code has no end-of-session event that can still run the model (SessionEnd hooks only run shell commands), so it fires at the end of each turn and asks you to update the note only when the session has used Edit, Write, MultiEdit, NotebookEdit, or Bash since `HANDOFF.md` was last written. `hooks/handoff_start.py` is a SessionStart hook that loads `HANDOFF.md` into context on startup, `/clear`, and compaction. Setup is in the repo README.
+`hooks/handoff_stop.py` is a Stop hook. Claude Code has no end-of-session event that can still run the model (SessionEnd hooks only run shell commands), so it fires at the end of each turn and asks you to update the note only when the session has used Edit, Write, MultiEdit, NotebookEdit, or Bash since `HANDOFF.md` was last written. `hooks/handoff_start.py` is a SessionStart hook that loads `HANDOFF.md` into context on startup, `/clear`, and compaction. `hooks/test_hooks.py` tests both. Setup is in the repo README.
 
 Without hooks, one line in `CLAUDE.md` does most of the job:
 

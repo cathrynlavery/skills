@@ -5,6 +5,7 @@ My Claude Code skills, one folder per skill.
 | Skill | What it does | Install |
 | --- | --- | --- |
 | [session-handoff](session-handoff/) | Keeps a `HANDOFF.md` in the project root so each new session starts with full context and you never need `claude --resume`. | `npx skills add cathrynlavery/skills --skill session-handoff -a claude-code -g` |
+| [tailscale-superpowers](tailscale-superpowers/) | Everyday Tailscale jobs for the agents on your Macs, like safe hotel wifi, printing at home from anywhere, or letting a contractor into one Mac, with clear rules on what the agent may do without asking. Full guide in [its own repo](https://github.com/cathrynlavery/tailscale-superpowers). | `npx skills add cathrynlavery/skills --skill tailscale-superpowers -a claude-code -g` |
 
 ## Install
 

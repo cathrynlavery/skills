@@ -80,6 +80,10 @@ How it stays safe:
 
 Never give the user a `localhost` link; it only opens on this machine. Run `scripts/tailnet-url <port> [path]` and give them the link it prints. Where the `localhost-guard` hook is installed, it does this itself: any localhost link left in a reply gets a working tailnet link shown under it, with no agent step. Setup and stable names: [links-not-localhost.md](references/links-not-localhost.md).
 
+If a tailnet link opens from the shell but fails in Arc, check whether Arc's
+Secure DNS bypasses the system resolver and try Safari. Verify the link in a
+browser that can resolve the MagicDNS name (LRN-20261011-SILVERFO0F7B3E58C1).
+
 ## Recipes
 
 - [travel-wifi.md](references/travel-wifi.md): hotel or plane wifi you don't trust. Send your traffic through your home Mac.
